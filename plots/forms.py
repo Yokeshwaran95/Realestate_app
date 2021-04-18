@@ -11,11 +11,13 @@ class PostForm(forms.ModelForm):
 		model=Properties
 		fields='__all__'
 
-class RegisterForm(UserCreationForm):
-	email=forms.EmailField()
-	class Meta:
-		model=User
-		fields=["username", "email", "password1", "password2"]
+
+class SignUpForm(UserCreationForm):
+    birth_date = forms.DateField(help_text='Required. Format: YYYY-MM-DD')
+
+    class Meta:
+        model = User
+        fields = ('username', 'birth_date', 'password1', 'password2', )
 
 
 

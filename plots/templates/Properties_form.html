@@ -1,4 +1,4 @@
-<form method="post" action="">
+<form enctype="multipart/form-data" method="post" >
 {% csrf_token %}
   {{ form.as_table }}
   <input type="submit" value="Submit" />

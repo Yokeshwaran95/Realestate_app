@@ -1,12 +1,13 @@
 from django.shortcuts import render, reverse, redirect
 from django.http import HttpResponse, HttpResponseRedirect
-from plots.models import ( Name, Properties )
-from plots.forms import ( NameForm, RegisterForm )
+from plots.models import ( Profile, Properties )
+from plots.forms import ( NameForm, SignUpForm )
 from django.views.generic import ( ListView, CreateView, DetailView, DeleteView )
 from django.contrib.auth.mixins import ( LoginRequiredMixin )
 from django.contrib.messages.views import SuccessMessageMixin
 from django.urls import reverse_lazy
 from django.contrib.auth import authenticate, login
+from django.contrib.auth.password_validation import validate_password
 
 
 # Create your views here.
@@ -14,31 +15,44 @@ from django.contrib.auth import authenticate, login
 def intro(request):
 	return render(request,"index.html")
 
-def contact(request):
-	# print(request.POST)
-	if request.method=="POST":
-		form=NameForm(request.POST)
-		if form.is_valid():
-			name=form.cleaned_data['uname']
-			N=Name(name=name)
-			N.save()
-			return render(request,"contact.html",{'form': form})
-	return render(request,"contact.html")
+# def contact(request):
+# 	# print(request.POST)
+# 	if request.method=="POST":
+# 		form=NameForm(request.POST)
+# 		if form.is_valid():
+# 			name=form.cleaned_data['uname']
+# 			N=Name(name=name)
+# 			N.save()
+# 			return render(request,"contact.html",{'form': form})
+# 	return render(request,"contact.html")
 
-def Registration(request):
-	print(request.POST)
-	if request.method=="POST":
-		form=RegisterForm(request.POST)
-		if form.is_valid():
-			form.save()
-			username=form.cleaned_data.get('username')
-			email=form.cleaned_data.get('email')
-			password1=form.cleaned_data.get('password1')
-			password2=form.cleaned_data.get('password2')
-			
-	else:
-		form=RegisterForm()
-	return render(request,"registration/register.html",{'form': form})
+# def signup(request):
+#     if request.method == 'POST':
+#         form = SignUpForm(request.POST)
+#         if form.is_valid():
+#             user = form.save()
+#             user.refresh_from_db()  # load the profile instance created by the signal
+#             user.profile.birth_date = form.cleaned_data.get('birth_date')
+#             user.save()
+#             raw_password = form.cleaned_data.get('password1')
+#             user = authenticate(username=user.username, password=raw_password)
+#             login(request, user)
+#             return redirect('home')
+#     else:
+#         form = SignUpForm()
+#     return render(request, 'registration/register.html', {'form': form})
+
+def signup(request):
+    if request.method == 'POST':
+        form = SignUpForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('home')
+    else:
+        form = SignUpForm()
+
+
+    return render(request, 'registration/register.html', {'form': form})
 
 
 
@@ -61,7 +75,7 @@ class PropertiesDeleteView(DeleteView):
 
 class PostView(LoginRequiredMixin,CreateView):
 	model=Properties
-	fields=['title','location','description','contact_num','Price','sale_type','Type']
+	fields=['title','location','description','contact_num','Price','sale_type','Type','Img']
 	login_url="/login/"
 	def get_success_url(self):
 		return reverse("Home")

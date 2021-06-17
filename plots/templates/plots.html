@@ -1,12 +1,53 @@
-<ul>
-    <!-- Iterate over object_list -->
-    {% for object in object_list %}
-    <strong><b><a href="{% url 'detail' object.id %}">{{ object.id }}. {{ object.title }}</a></b></strong>
-    <p>{{ object.description |slice:"100" }}<a href="{% url 'detail' object.id %}"> Read more....</a></p>
-  
-    <hr/>
-    <!-- If objet_list is empty  -->
-    {% empty %}
-    <li>No objects yet.</li>
-    {% endfor %}
-</ul>
+<style>
+	body{
+		padding:20px;
+		border-color:black;
+		background-color: #E0FFFF;
+	}
+
+	div{
+		padding:20px;
+		width:100%;
+	}	
+	strong{
+		font-family: Arial black;
+		text-decoration: none;
+		padding:10px;
+	}
+	p{
+		padding-left:20px;
+		font-weight:20px;
+		font-family:black;
+	}
+	.nav h1{
+		color:white;
+		padding-left:20%;
+	}
+
+	.nav{
+		width:100%;
+		background-color:black;
+
+	}
+	
+	
+</style>
+<body>
+<div class="nav">
+	<h1>Shelterwoods</h1>
+</div>
+<div class="list">
+	<ul>
+	    <!-- Iterate over object_list -->
+	    {% for object in object_list %}
+	    <strong><b><a href="{% url 'detail' object.id %}">{{ object.id }}. {{ object.title }}</a></b></strong>
+	    <p>{{ object.description |slice:"100" }}<a href="{% url 'detail' object.id %}"> Read more....</a></p>
+	  
+	    <hr/>
+	    <!-- If objet_list is empty  -->
+	    {% empty %}
+	    <li>No objects yet.</li>
+	    {% endfor %}
+	</ul>
+</div>
+</body>

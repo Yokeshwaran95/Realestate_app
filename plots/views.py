@@ -1,6 +1,6 @@
 from django.shortcuts import render, reverse, redirect
 from django.http import HttpResponse, HttpResponseRedirect
-from plots.models import ( Profile, Properties )
+from plots.models import ( Properties )
 from plots.forms import ( NameForm, SignUpForm )
 from django.views.generic import ( ListView, CreateView, DetailView, DeleteView )
 from django.contrib.auth.mixins import ( LoginRequiredMixin )
@@ -8,23 +8,25 @@ from django.contrib.messages.views import SuccessMessageMixin
 from django.urls import reverse_lazy
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.password_validation import validate_password
-
+from django.core.mail import send_mail
+from django.conf import settings
 
 # Create your views here.
 
 def intro(request):
 	return render(request,"index.html")
 
-# def contact(request):
-# 	# print(request.POST)
-# 	if request.method=="POST":
-# 		form=NameForm(request.POST)
-# 		if form.is_valid():
-# 			name=form.cleaned_data['uname']
-# 			N=Name(name=name)
-# 			N.save()
-# 			return render(request,"contact.html",{'form': form})
-# 	return render(request,"contact.html")
+def contact(request):
+	if request.method=="POST":
+		query_person=request.POST.get('Name')
+		message=request.POST.get('message')
+		receiver=request.POST.get('emailid')
+		send_mail('Realestate Query from'+query_person,
+			message,
+			settings.EMAIL_HOST_USER,
+			[receiver],
+			fail_silently=False)
+	return render(request,"contact.html")
 
 # def signup(request):
 #     if request.method == 'POST':
@@ -81,9 +83,7 @@ class PostView(LoginRequiredMixin,CreateView):
 		return reverse("Home")
 
 class PlotsView(ListView):
-	model=Properties
 	template_name='plots.html'
-	def get_queryset(self,*args,**kwargs):
-		qs=super(PlotsView,self).get_queryset(*args,**kwargs)
-		qs=qs.order_by('posted_on')
-		return qs
+	def get_queryset(self):
+		return Properties.objects.filter(Type__contains="plot")
+

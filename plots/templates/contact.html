@@ -1,5 +1,28 @@
 <h1>For more details, Visit below</h1>
+<div class ="container">
+<div class ="right">
+<h2>To reach us</h2>
 <h3> Address </h3>
+<p>Villivakam, Annanagar, Chennai-49</p>
+<hr>
+<h3> Contact </h3>
+<p> 9876543210 </p>
+<div>
+<div class="left">
+<h2>Post your query here</h2>
 <Form method="POST">
-	
+	{% csrf_token %}
+	<label type="Name">Your Name</label>
+	<input type="text" name="Name">
+	<br><br>
+	<label type="Contact No">Your Contact No</label>
+	<input type="text" name="contactnumber"><br><br>
+	<label type="Email">Your Email</label>
+	<input type="text" name="emailid"><br><br>
+	<label type="Message">Your Message</label>
+	<textarea id="message" name="message"></textarea><br><br>
+	<input type="submit" value="Submit Query">
+
 </Form>
+</div>
+</div>
